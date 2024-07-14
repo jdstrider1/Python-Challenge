@@ -1,42 +1,45 @@
 import os
 import csv
 
-total_months = 0 # Set starting values for calcuations as 0
+current_dir = os.path.dirname(os.path.realpath(__file__))  # Get the current working directory
+file_path = os.path.join(current_dir, 'Resources', 'budget_data.csv')  # Construct the absolute file path to the CSV file
+
+total_months = 0
 net_total = 0
 changes = []
 average_change = 0
 
-with open('Resources/budget_data.csv', 'r') as file: # Open CSV file with correct filepath
+with open(file_path, 'r') as file:
     csv_reader = csv.reader(file)
     next(csv_reader)  # Skip the header row
-    previous_profit = 0 # Set starting point for profit as 0
-    max_increase = 0 # Set starting greatest profit as 0
-    max_increase_date = "" # Allows tracking of date of greatest profit so far
-    max_decrease = 0 # Set starting lowest profit as 0
-    max_decrease_date = "" # Allows tracking of date of lowest profit so far
+    previous_profit = 0
+    max_increase = 0
+    max_increase_date = ""
+    max_decrease = 0
+    max_decrease_date = ""
 
     for row in csv_reader:
-        total_months += 1 # Sum up the number of months
-        net_total += int(row[1]) # Sum up the changes in profit/loss over the entire period
+        total_months += 1
+        net_total += int(row[1])
 
-        current_profit = int(row[1])  # Set value for current profit to correct column
-        change = current_profit - previous_profit  # Find difference in profit between rows
-        changes.append(change) # Add new value to list of changes        
-        current_date = row[0] # Set date for Max/Min profit as current row to correct column        
+        current_profit = int(row[1])
+        change = current_profit - previous_profit
+        changes.append(change)
+        current_date = row[0]
 
-        if change > max_increase: # Set max_increase as current row if it is the greatest value so far
+        if change > max_increase:
             max_increase = change
-            max_increase_date = current_date # Save date of row with greatest value so far
+            max_increase_date = current_date
 
-        if change < max_decrease: # Set max_decrease as current row if it is the lowest value so far
+        if change < max_decrease:
             max_decrease = change
-            max_decrease_date = current_date # Save date of row with lowest value so far
+            max_decrease_date = current_date
 
-        previous_profit = current_profit # Update previous profit for the next iteration
+        previous_profit = current_profit
 
     average_change = sum(changes[1:]) / (len(changes) - 1)
 
-print("Financial Analysis") # Print all requested values for text analysis
+print("Financial Analysis")
 print("------------------------")
 print(f'Total Months: {total_months}')
 print(f'Total: ${net_total}')
@@ -44,8 +47,11 @@ print(f'Average Change: ${average_change:.2f}')
 print(f'Greatest Increase in Profits: {max_increase_date} (${max_increase})')
 print(f'Greatest Decrease in Profits: {max_decrease_date} (${max_decrease})')
 
-output_file = "financial_analysis.txt" # Create text file with analysis data
-with open(output_file, 'w') as output:
+folder_name = "Analysis"
+output_file = "financial_analysis.txt"
+file_path = os.path.join(current_dir, folder_name, output_file)  # Construct the absolute file path for the output file
+
+with open(file_path, 'w') as output:  # Open the file for writing
     output.write("Financial Analysis\n")
     output.write("------------------------\n")
     output.write(f'Total Months: {total_months}\n')
@@ -54,4 +60,4 @@ with open(output_file, 'w') as output:
     output.write(f'Greatest Increase in Profits: {max_increase_date} (${max_increase})\n')
     output.write(f'Greatest Decrease in Profits: {max_decrease_date} (${max_decrease})\n')
 
-print(f"Financial analysis has been exported to {output_file}") # Confirm writing of text file
+print(f"Financial analysis has been exported to {output_file}")
