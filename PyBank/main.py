@@ -12,34 +12,34 @@ average_change = 0
 with open(file_path, 'r') as file:
     csv_reader = csv.reader(file)
     next(csv_reader)  # Skip the header row
-    previous_profit = 0
+    previous_profit = 0 # Set starting value of variables 
     max_increase = 0
     max_increase_date = ""
     max_decrease = 0
     max_decrease_date = ""
 
-    for row in csv_reader:
+    for row in csv_reader: # Calculate total number of months and net total amount for profit/losses
         total_months += 1
         net_total += int(row[1])
 
-        current_profit = int(row[1])
-        change = current_profit - previous_profit
-        changes.append(change)
-        current_date = row[0]
+        current_profit = int(row[1]) # Set which column current profit will look at
+        change = current_profit - previous_profit # Calculate profit change between each row 
+        changes.append(change) # Add found value to list tracking all profit changes
+        current_date = row[0] # Store date value of the row
 
-        if change > max_increase:
+        if change > max_increase: # Keep track of which value is the maximum so far
             max_increase = change
             max_increase_date = current_date
 
-        if change < max_decrease:
+        if change < max_decrease: # Keep track of which value is the minimum so far
             max_decrease = change
             max_decrease_date = current_date
 
-        previous_profit = current_profit
+        previous_profit = current_profit # Update current profit for next iteration
 
-    average_change = sum(changes[1:]) / (len(changes) - 1)
+    average_change = sum(changes[1:]) / (len(changes) - 1) # Calculate the average change
 
-print("Financial Analysis")
+print("Financial Analysis") # Print result of analysis in text and desired format
 print("------------------------")
 print(f'Total Months: {total_months}')
 print(f'Total: ${net_total}')
